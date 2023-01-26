@@ -1,19 +1,13 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <nav>
+    <router-link to="/">Home</router-link> |
+    <router-link to="/register">Register</router-link> |
+    <router-link to="/sign-in">Login</router-link>
+  </nav>
+  <router-view />
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
-
-export default defineComponent({
-  name: "App",
-  components: {
-    HelloWorld,
-  },
-});
-</script>
+<script lang="ts"></script>
 
 <style>
 #app {
