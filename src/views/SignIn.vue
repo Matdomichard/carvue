@@ -8,50 +8,52 @@
 </template>
 
 <script lang="ts">
-import {ref} from "vue";
-import {getAuth,
-  GoogleAuthProvider,
-  signInWithPopup
-} from "firebase/auth";
-import {useRouter} from "vue-router";
-const email = ref('')
-const password = ref('')
-const errMsg = ref() // ERROR MESSAGE
-const router = useRouter();
-import axios from "axios";
-
-const register = () => {
-  if(email.value.includes("@")) {
-    axios.post('http://localhost:8080/user', {
-      email: email.value,
-      password: password.value
-    })
-    .then(function (response: any) {
-      console.log(response);
-      router.push('/')
-    })
-    .catch(function (error: any) {
-      console.log(error);
-    });
-  }
-}
-
-const signInWithGoogle = () => {
-  const provider = new GoogleAuthProvider();
-  signInWithPopup(getAuth(), provider)
-  .then((result) => {
-    console.log(result.user);
-    router.push("/feed")
-  }).catch((error) => {
-    console.log(error.code);
-  });
-}
+import { ref } from 'vue';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
 
 export default {
-  email,
-  password,
-  register,
-  signInWithGoogle
-}
+  setup() {
+    const email = ref('');
+    const password = ref('');
+    const errMsg = ref();
+    const router = useRouter();
 
+    const register = () => {
+      if (email.value.includes('@')) {
+        axios.post('http://localhost:8080/user', {
+          email: email.value,
+          password: password.value
+        })
+        .then((response) => {
+          console.log(response);
+          router.push('/');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      }
+    };
+
+    const signInWithGoogle = () => {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(getAuth(), provider)
+      .then((result) => {
+        console.log(result.user);
+        router.push('/feed');
+      }).catch((error) => {
+        console.log(error.code);
+      });
+    };
+
+    return {
+      email,
+      password,
+      errMsg,
+      register,
+      signInWithGoogle
+    }
+  }
+}
 </script>
