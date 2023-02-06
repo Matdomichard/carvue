@@ -7,43 +7,56 @@
 </template>
 
 <script lang="ts">
+import { ref } from 'vue';
 import axios, { AxiosError }from 'axios';
 import { useRouter } from 'vue-router';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import router from "../router";
+
+interface RegisterData {
+  email: string;
+  password: string;
+}
 
 export default {
-  name: 'RegisterPage',
-  data() {
-    return {
-      email: '',
-      password: '',
-    };
-  },
-  methods: {
-    async register() {
-      if (this.email.includes('@')) {
+  name: 'register',
+  setup() {
+    const email = ref('');
+    const password = ref('');
+    const router = useRouter();
+
+    const register = async () => {
+      if (email.value.includes('@')) {
         try {
           const response = await axios.post('http://localhost:8080/users', {
-            email: this.email,
-            password: this.password,
+            email: email.value,
+            password: password.value,
           });
           console.log(response);
-          this.$router.push('/');
+          router.push('/');
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       }
-    },
-    async signInWithGoogle() {
+    };
+
+    const signInWithGoogle = async () => {
       try {
         const provider = new GoogleAuthProvider();
         const result = await signInWithPopup(getAuth(), provider);
         console.log(result.user);
-        this.$router.push('/feed');
-      } catch (error: any) {
-        console.log(error.code);
+        router.push('/');
+      } catch (error) {
+        console.log(error);
       }
-    },
+    };
+
+    return {
+      email,
+      password,
+      register,
+      signInWithGoogle,
+    };
   },
 };
 </script>

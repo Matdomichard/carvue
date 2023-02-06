@@ -3,7 +3,7 @@
   <p><input type="text" placeholder="Email" v-model="email" /></p>
   <p><input type="password" placeholder="Mot de passe" v-model="password" /></p>
   <p v-if="errMsg">{{ errMsg }}</p>
-  <p><button @click="register">Se connecter</button></p>
+  <p><button @click="login">Se connecter</button></p>
   <p><button @click="signInWithGoogle">Se connecter avec google</button></p>
 </template>
 
@@ -20,11 +20,11 @@ export default {
     const errMsg = ref();
     const router = useRouter();
 
-    const register = () => {
+    const login = () => {
       if (email.value.includes('@')) {
-        axios.post('http://localhost:8080/user', {
-          email: email.value,
-          password: password.value
+        axios.post('http://localhost:8080/users/login', {
+        email: email.value,
+        password: password.value,
         })
         .then((response) => {
           console.log(response);
@@ -41,7 +41,7 @@ export default {
       signInWithPopup(getAuth(), provider)
       .then((result) => {
         console.log(result.user);
-        router.push('/feed');
+        router.push('/');
       }).catch((error) => {
         console.log(error.code);
       });
@@ -51,7 +51,7 @@ export default {
       email,
       password,
       errMsg,
-      register,
+      login,
       signInWithGoogle
     }
   }
