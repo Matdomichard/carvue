@@ -22,7 +22,7 @@ export default {
 
     const login = () => {
       if (email.value.includes('@')) {
-        axios.post('http://localhost:8080/users/login', {
+        axios.post('users/login', {
         email: email.value,
         password: password.value,
         })
@@ -36,16 +36,23 @@ export default {
       }
     };
 
-    const signInWithGoogle = () => {
-      const provider = new GoogleAuthProvider();
-      signInWithPopup(getAuth(), provider)
-      .then((result) => {
-        console.log(result.user);
-        router.push('/');
-      }).catch((error) => {
-        console.log(error.code);
-      });
-    };
+    const signInWithGoogle = async () => {
+  try {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(getAuth(), provider);
+    console.log(result.user);
+
+    const response = await axios.post('users/login', {
+      email: result.user.email,
+      name: result.user.displayName
+    });
+    console.log(response);
+
+    router.push('/');
+  } catch (error) {
+    console.log(error);
+  }
+};
 
     return {
       email,

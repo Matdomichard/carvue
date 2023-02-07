@@ -25,31 +25,40 @@ export default {
     const password = ref('');
     const router = useRouter();
 
-    const register = async () => {
+    const register = () => {
       if (email.value.includes('@')) {
-        try {
-          const response = await axios.post('http://localhost:8080/users', {
-            email: email.value,
-            password: password.value,
-          });
+        axios.post('users/createUser', {
+        email: email.value,
+        password: password.value,
+        })
+        .then((response) => {
           console.log(response);
           router.push('/');
-        } catch (error) {
-          console.error(error);
-        }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       }
     };
 
     const signInWithGoogle = async () => {
-      try {
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(getAuth(), provider);
-        console.log(result.user);
-        router.push('/');
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  try {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(getAuth(), provider);
+    console.log(result.user);
+
+    const response = await axios.post('users/createUser', {
+      email: result.user.email,
+      password: result.user.uid,
+      signInMethod: "google"
+    });
+    console.log(response);
+
+    router.push('/');
+  } catch (error) {
+    console.log(error);
+  }
+};
 
     return {
       email,
