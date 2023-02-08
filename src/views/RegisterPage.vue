@@ -30,13 +30,13 @@ export default {
         axios.post('users/createUser', {
         email: email.value,
         password: password.value,
+        signInMethod: 'email'
         })
         .then((response) => {
-          console.log(response);
           router.push('/');
         })
         .catch((error) => {
-          console.log(error);
+          console.log('error',error);
         });
       }
     };
@@ -52,8 +52,6 @@ export default {
       password: result.user.uid,
       signInMethod: "google"
     });
-    console.log(response);
-
     router.push('/');
   } catch (error) {
     console.log(error);
