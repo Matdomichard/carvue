@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
+import {createPinia} from "pinia";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -23,7 +24,7 @@ const firebaseConfig = {
 // Initialize Firebase
 initializeApp(firebaseConfig);
 
-const app = createApp(App);
+const app = createApp(App).use(createPinia());
 
 // const analytics = getAnalytics(app);
 

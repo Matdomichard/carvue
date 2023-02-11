@@ -7,27 +7,31 @@
   </nav>
   <router-view />
 </template>
-
 <script lang="ts">
 import { onMounted, ref } from "vue";
 import { Auth, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import firebase from "firebase/app";
 import router from "./router";
+import { useUserStore} from './stores/userStore';
 
 export default {
   name: "App",
   setup() {
-    const isLoggedIn = ref(false);
+    const userStore = useUserStore();
+    const isLoggedIn = ref<boolean>(false);
     let auth: Auth;
+
 onMounted(() => {
     auth = getAuth();
     onAuthStateChanged(auth, (user) => {
-        if (user) {
-            isLoggedIn.value = true;
-        } else {
-            isLoggedIn.value = false;
-        }
-    });
+  if (user) {
+    userStore.setIsLoggedIn(true);
+    isLoggedIn.value = true;
+  } else {
+    userStore.setIsLoggedIn(false);
+    isLoggedIn.value = false;
+  }
+});
 });
 
     const handleSignOut = () => {
@@ -39,14 +43,12 @@ onMounted(() => {
 
     return {
       isLoggedIn,
-      handleSignOut
+      handleSignOut,
+      userStore
     };
   }
 };
 </script>
-
-
-
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

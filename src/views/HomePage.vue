@@ -18,53 +18,63 @@
     </ul>
   </div>
 </template>
-
-<script>
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
+<script lang='ts'>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { useUserStore } from '@/stores/userStore';
 
 export default {
   setup() {
+    const userStore = useUserStore();
     const form = ref({
-      name: "",
-      selectedDate: "",
+      name: '',
+      selectedDate: '',
     });
     const savedDates = ref([]);
 
-    function saveDate() {
-      axios.post('dates/1', {
-        userId: 1,
+    const saveDate = () => {
+      const headers = {
+        Authorization: `Bearer ${userStore.$state.user.token}`,
+      };
+      axios.post(`dates/${userStore.$state.user.id}`, {
         name: form.value.name,
-        date: form.value.selectedDate
-      })
+        date: form.value.selectedDate,
+      }, { headers })
         .then(() => {
           savedDates.value.push({
             name: form.value.name,
-            date: form.value.selectedDate
+            date: form.value.selectedDate,
           });
-          form.value.name = "";
-          form.value.selectedDate = "";
+          form.value.name = '';
+          form.value.selectedDate = '';
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error);
         });
-    }
+    };
 
     onMounted(() => {
-      axios.get('dates/1')
-        .then(response => {
-          savedDates.value = response.data;
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      if (userStore.$state.user.id) {
+        const headers = {
+          Authorization: `Bearer ${userStore.$state.user.token}`,
+        };
+        axios.get(`dates/${userStore.$state.user.id}`, { headers })
+          .then((response) => {
+            savedDates.value = response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        console.error("L'ID de l'utilisateur est manquant.");
+      }
     });
 
     return {
       form,
       savedDates,
-      saveDate
+      saveDate,
     };
-  }
+  },
 };
 </script>

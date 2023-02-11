@@ -11,7 +11,8 @@ import { ref } from 'vue';
 import axios, { AxiosError }from 'axios';
 import { useRouter } from 'vue-router';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import router from "../router";
+import { useUserStore } from '@/stores/userStore';
+import { User } from '@/models/user.model';
 
 interface RegisterData {
   email: string;
@@ -24,6 +25,7 @@ export default {
     const email = ref('');
     const password = ref('');
     const router = useRouter();
+    const userStore = useUserStore();
 
     const register = () => {
       if (email.value.includes('@')) {
@@ -33,6 +35,9 @@ export default {
         signInMethod: 'email'
         })
         .then((response) => {
+          const { id, email, timeUnit, token } = response.data;
+          userStore.$state.user = new User(id, email, timeUnit, token);
+          userStore.setIsLoggedIn(true);
           router.push('/');
         })
         .catch((error) => {
@@ -52,6 +57,8 @@ export default {
       password: result.user.uid,
       signInMethod: "google"
     });
+    const { id, email, timeUnit, token } = response.data;
+          userStore.$state.user = new User(id, email, timeUnit, token);
     router.push('/');
   } catch (error) {
     console.log(error);
