@@ -20,10 +20,17 @@
     </ul>
     <template v-if="!userStore.$state.user.id">
       <p>Vous n'êtes pas connecté. Pour enregistrer vos dates, veuillez vous connecter ou créer un compte.</p>
-      <router-link to="/register">Créer un compte</router-link>
+      <router-link to="/sign-in">
+        <p> <button>Se connecter</button></p>
+      </router-link>
+      <router-link to="/register">
+      <p> <button>Créer un compte</button></p>
+      </router-link>
     </template>
   </div>
 </template>
+
+
 <script lang="ts">
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
@@ -66,7 +73,7 @@ export default {
         console.error("L'ID de l'utilisateur est manquant.");
       }
     };
-    
+
     const fetchSavedDates = () => {
       if (userStore.$state.user.id) {
         const headers = {
@@ -82,17 +89,18 @@ export default {
       } else {
         console.error("L'ID de l'utilisateur est manquant.");
       }
+    };
+  
+    onMounted(() => {
+      fetchSavedDates();
+    });
+
+    return {
+      form,
+      userStore,
+      savedDates,
+      saveDate,
+    };
+  },
 };
-
-
-onMounted(() => {
-fetchSavedDates();
-});
-
-return {
-form,
-userStore,
-savedDates,
-saveDate};
-}};
 </script>
