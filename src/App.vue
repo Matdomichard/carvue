@@ -3,49 +3,41 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/register">Register</router-link> |
     <router-link to="/sign-in">Login</router-link>
-    <button @click="handleSignOut" v-if="isLoggedIn">Sign out</button>
+    <button @click="handleSignOut" v-if="userStore.$state.user.id">Sign out</button>
   </nav>
   <router-view />
 </template>
 
 <script lang="ts">
 import { onMounted, ref } from "vue";
-import { Auth, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { Auth, getAuth, signOut } from "firebase/auth";
 import firebase from "firebase/app";
 import router from "./router";
+import { useUserStore } from "./stores/userStore";
 
 export default {
   name: "App",
   setup() {
-    const isLoggedIn = ref(false);
+    const userStore = useUserStore();
     let auth: Auth;
-onMounted(() => {
-    auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            isLoggedIn.value = true;
-        } else {
-            isLoggedIn.value = false;
-        }
+
+    onMounted(() => {
+      auth = getAuth();
     });
-});
 
     const handleSignOut = () => {
-      signOut(auth).then(() => {
-        console.log("User signed out");
-        router.push("/");
-      });
-    };
+    console.log("User signed out");
+    userStore.signOut();
+    router.push("/");
+  };
 
     return {
-      isLoggedIn,
-      handleSignOut
+      handleSignOut,
+      userStore
     };
   }
 };
 </script>
-
-
 
 <style>
 #app {
