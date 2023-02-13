@@ -11,13 +11,15 @@
       <button @click.prevent="saveDate">Enregistrer</button>
     </form>
     <h1>Dates enregistrées</h1>
-    <ul>
-      <li v-for="date in savedDates" :key="date.name" class="flex">
-        <div class="w-1/2">{{ date.name }}
-          <DateCalculator :date="date.date" />
-        </div>
-      </li>
-    </ul>
+    <template v-if="userStore.$state.user.id">
+      <ul>
+        <li v-for="date in savedDates" :key="date.name" class="flex">
+          <div class="w-1/2">{{ date.name }}
+            <DateCalculator :date="date.date" />
+          </div>
+        </li>
+      </ul>
+    </template>
     <template v-if="!userStore.$state.user.id">
       <p>Vous n'êtes pas connecté. Pour enregistrer vos dates, veuillez vous connecter ou créer un compte.</p>
       <router-link to="/sign-in">
@@ -32,7 +34,7 @@
 
 
 <script lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import axios from 'axios';
 import DateCalculator from '@/components/dateCalculator.vue';
 import { useUserStore } from '@/stores/userStore';
@@ -90,7 +92,7 @@ export default {
         console.error("L'ID de l'utilisateur est manquant.");
       }
     };
-  
+
     onMounted(() => {
       fetchSavedDates();
     });
