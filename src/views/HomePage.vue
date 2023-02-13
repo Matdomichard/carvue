@@ -101,7 +101,7 @@ export default {
         const headers = {
           Authorization: `Bearer ${userStore.$state.user.token}`,
         };
-        axios.get(`dates/${userStore.$state.user.id}`, { headers })
+        axios.get(`dates/user/${userStore.$state.user.id}`, { headers })
           .then((response) => {
             savedDates.value = response.data;
           })

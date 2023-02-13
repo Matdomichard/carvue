@@ -12,8 +12,6 @@ interface Props {
   date: string;
 }
 
-const franceTimezoneOffset = 2;
-
 export default {
   props: {
     date: {
@@ -31,20 +29,16 @@ const sleepCalculator = computed(() => {
   }
 
   const now = new Date();
-  const offsetNow = new Date(now.getTime() + (franceTimezoneOffset * 60 * 60 * 1000));
   const eventDate = new Date(selectedDate.value);
-  const diffTime = eventDate.getTime() - offsetNow.getTime();
+  const diffTime = eventDate.getTime() - now.getTime();
   const diffDays = diffTime / (1000 * 3600 * 24);
 
   switch (userStore.$state.user.timeUnit) {
     case 'dodos':
-      return Math.round(diffDays / 3.5);
+    return Math.ceil(diffDays) + " dodos";
     case 'jours':
-      return Math.round(diffDays);
-    case 'mois':
-      return Math.round(diffDays / 30.4167);
-    case 'années':
-      return Math.round(diffDays / 365);
+      return Math.ceil(diffDays) +1 + " jours";
+
     default:
       return '';
   }

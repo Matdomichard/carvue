@@ -34,6 +34,7 @@ export default {
         .then((response) => {
           const { id, email, timeUnit, token } = response.data;
           userStore.$state.user = new User(id, email, timeUnit, token);
+          console.log('response data', response.data)
           router.push('/');
         })
         .catch((error) => {
