@@ -14,6 +14,7 @@ import { Auth, getAuth, signOut } from "firebase/auth";
 import firebase from "firebase/app";
 import router from "./router";
 import { useUserStore } from "./stores/userStore";
+import './index.css'
 
 export default {
   name: "App",

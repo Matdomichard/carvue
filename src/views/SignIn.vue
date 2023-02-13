@@ -3,8 +3,8 @@
   <p><input type="text" placeholder="Email" v-model="email" /></p>
   <p><input type="password" placeholder="Mot de passe" v-model="password" /></p>
   <p v-if="errMsg">{{ errMsg }}</p>
-  <p><button @click="login">Se connecter</button></p>
-  <p><button @click="signInWithGoogle">Se connecter avec google</button></p>
+  <p><button class="btn btn-primary" @click="login">Se connecter</button></p>
+  <p><button class="btn btn-primary" @click="signInWithGoogle">Se connecter avec google</button></p>
 </template>
 
 <script lang="ts">

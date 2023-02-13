@@ -26,10 +26,10 @@
     <template v-if="!userStore.$state.user.id">
       <p>Vous n'êtes pas connecté. Pour enregistrer vos dates, veuillez vous connecter ou créer un compte.</p>
       <router-link to="/sign-in">
-        <p> <button>Se connecter</button></p>
+        <p> <button class="btn">Se connecter</button></p>
       </router-link>
       <router-link to="/register">
-      <p> <button>Créer un compte</button></p>
+      <p> <button class="btn">Créer un compte</button></p>
       </router-link>
     </template>
   </div>
