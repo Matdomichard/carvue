@@ -24,7 +24,9 @@ export default {
     const userStore = useUserStore();
 
     const login = () => {
-      if (email.value.includes('@')) {
+      if (!email.value.includes('@')) {
+        errMsg.value = "Email invalide";
+      } else {
         axios.post('users/login', {
         email: email.value,
         password: password.value,
@@ -36,6 +38,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+          errMsg.value = "Email ou mot de passe incorrect";
         });
       }
     };
