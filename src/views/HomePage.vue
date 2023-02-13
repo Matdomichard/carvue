@@ -12,48 +12,62 @@
     </form>
     <h1>Dates enregistrées</h1>
     <ul>
-      <li v-for="date in savedDates" :key="date.name">
-        {{ date.name }} - {{ date.date }}
+      <li v-for="date in savedDates" :key="date.name" class="flex">
+        <div class="w-1/2">{{ date.name }}
+          <DateCalculator :date="date.date" />
+        </div>
       </li>
     </ul>
+    <template v-if="!userStore.$state.user.id">
+      <p>Vous n'êtes pas connecté. Pour enregistrer vos dates, veuillez vous connecter ou créer un compte.</p>
+      <router-link to="/register">Créer un compte</router-link>
+    </template>
   </div>
 </template>
-<script lang='ts'>
+<script lang="ts">
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import DateCalculator from '@/components/dateCalculator.vue';
 import { useUserStore } from '@/stores/userStore';
 
 export default {
+  components: {
+    DateCalculator,
+  },
   setup() {
     const userStore = useUserStore();
     const form = ref({
       name: '',
       selectedDate: '',
     });
-    const savedDates = ref([]);
+    const savedDates = ref<{ name: string, date: string }[]>([]);
 
     const saveDate = () => {
-      const headers = {
-        Authorization: `Bearer ${userStore.$state.user.token}`,
-      };
-      axios.post(`dates/${userStore.$state.user.id}`, {
-        name: form.value.name,
-        date: form.value.selectedDate,
-      }, { headers })
-        .then(() => {
-          savedDates.value.push({
-            name: form.value.name,
-            date: form.value.selectedDate,
+      if (userStore.$state.user.id) {
+        const headers = {
+          Authorization: `Bearer ${userStore.$state.user.token}`,
+        };
+        axios.post(`dates/${userStore.$state.user.id}`, {
+          name: form.value.name,
+          date: form.value.selectedDate,
+        }, { headers })
+          .then(() => {
+            savedDates.value.push({
+              name: form.value.name,
+              date: form.value.selectedDate,
+            });
+            form.value.name = '';
+            form.value.selectedDate = '';
+          })
+          .catch((error) => {
+            console.error(error);
           });
-          form.value.name = '';
-          form.value.selectedDate = '';
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      } else {
+        console.error("L'ID de l'utilisateur est manquant.");
+      }
     };
-
-    onMounted(() => {
+    
+    const fetchSavedDates = () => {
       if (userStore.$state.user.id) {
         const headers = {
           Authorization: `Bearer ${userStore.$state.user.token}`,
@@ -68,13 +82,17 @@ export default {
       } else {
         console.error("L'ID de l'utilisateur est manquant.");
       }
-    });
-
-    return {
-      form,
-      savedDates,
-      saveDate,
-    };
-  },
 };
+
+
+onMounted(() => {
+fetchSavedDates();
+});
+
+return {
+form,
+userStore,
+savedDates,
+saveDate};
+}};
 </script>
