@@ -3,22 +3,28 @@
     <h1>Enregistrer une nouvelle date</h1>
     <form>
       <label for="name">Nom de la date</label>
-      <input type="text" id="name" v-model="form.name" />
+      <input type="text" placeholder="Type here" class="input w-full max-w-xs" id="name" v-model="form.name" />
       <br />
       <label for="date">Date</label>
-      <input type="date" id="date" v-model="form.selectedDate" />
+      <input class="input w-full max-w-xs" type="date" id="date" v-model="form.selectedDate" />
       <br />
-      <button @click.prevent="saveDate">Enregistrer</button>
+      <button class="btn btn-primary" @click.prevent="saveDate">Enregistrer</button>
     </form>
     <h1>Dates enregistrées</h1>
     <template v-if="userStore.$state.user.id">
       <ul>
-        <li v-for="(date, index) in savedDates" :key="date.name" class="flex">
-          <div>{{ date.name }}
-            <DateCalculator :date="date.date" />
-          </div>
-          <div>
-            <i @click="deleteSavedDate(date.id, index)">❌</i>
+        <li v-for="(date, index) in savedDates" :key="date.name" >
+          <div class="stats bg-primary text-primary-content">
+  
+            <div class="stat">
+              <div class="stat-title">{{ date.name }}</div>
+              <DateCalculator :date="date.date" />
+              <div class="stat-actions">
+                <button class="btn btn-sm btn-success" @click="deleteSavedDate(date.id, index)">
+                  <i >❌</i>
+                </button>
+              </div>
+            </div>
           </div>
         </li>
       </ul>
@@ -26,10 +32,10 @@
     <template v-if="!userStore.$state.user.id">
       <p>Vous n'êtes pas connecté. Pour enregistrer vos dates, veuillez vous connecter ou créer un compte.</p>
       <router-link to="/sign-in">
-        <p> <button class="btn">Se connecter</button></p>
+        <p> <button class="btn btn-primary" >Se connecter</button></p>
       </router-link>
       <router-link to="/register">
-      <p> <button class="btn">Créer un compte</button></p>
+      <p> <button class="btn btn-primary" >Créer un compte</button></p>
       </router-link>
     </template>
   </div>

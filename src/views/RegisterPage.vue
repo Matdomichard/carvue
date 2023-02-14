@@ -1,10 +1,10 @@
 <template>
   <h1>Créer un compte</h1>
   <p v-if="errorMessage">{{ errorMessage }}</p>
-  <p><input type="text" placeholder="Email" v-model="email" /></p>
-  <p><input type="password" placeholder="Mot de passe" v-model="password" /></p>
-  <p><button @click="register">S'inscrire</button></p>
-  <p> <button @click="signInWithGoogle">S'inscrire avec Google</button></p>
+  <p><input type="text" class="input w-full max-w-xs" id="email" placeholder="Email" v-model="email" /></p>
+  <p><input type="password" class="input w-full max-w-xs" id="password" placeholder="Mot de passe" v-model="password" /></p>
+  <p><button class="btn btn-primary" @click="register">S'inscrire</button></p>
+  <p> <button class="btn btn-primary"  @click="signInWithGoogle">S'inscrire avec Google</button></p>
 </template>
 <script lang="ts">
 import { ref } from 'vue';
@@ -39,8 +39,8 @@ export default {
         signInMethod: 'email'
       })
         .then((response) => {
-          const { id, email, timeUnit, token } = response.data;
-          userStore.$state.user = new User(id, email, timeUnit, token);
+          const { id, email, timeUnit,theme, token } = response.data;
+          userStore.$state.user = new User(id, email, timeUnit, theme, token);
           router.push('/');
         })
         .catch((error) => {
@@ -60,8 +60,8 @@ export default {
           password: result.user.uid,
           signInMethod: "google"
         });
-        const { id, email, timeUnit, token } = response.data;
-          userStore.$state.user = new User(id, email, timeUnit, token);
+        const { id, email, timeUnit, theme, token } = response.data;
+          userStore.$state.user = new User(id, email, timeUnit, theme, token);
     router.push('/');
   } catch (error) {
     console.log(error);

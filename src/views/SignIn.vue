@@ -1,7 +1,7 @@
 <template>
   <h1>Se connecter à son compte</h1>
-  <p><input type="text" placeholder="Email" v-model="email" /></p>
-  <p><input type="password" placeholder="Mot de passe" v-model="password" /></p>
+  <p><input type="text" class="input w-full max-w-xs" id="email" placeholder="Email" v-model="email" /></p>
+  <p><input type="password" class="input w-full max-w-xs" id="password" placeholder="Mot de passe" v-model="password" /></p>
   <p v-if="errMsg">{{ errMsg }}</p>
   <p><button class="btn btn-primary" @click="login">Se connecter</button></p>
   <p><button class="btn btn-primary" @click="signInWithGoogle">Se connecter avec google</button></p>
@@ -32,8 +32,8 @@ export default {
         password: password.value,
         })
         .then((response) => {
-          const { id, email, timeUnit, token } = response.data;
-          userStore.$state.user = new User(id, email, timeUnit, token);
+          const { id, email, timeUnit, theme, token } = response.data;
+          userStore.$state.user = new User(id, email, timeUnit, theme, token);
           console.log('response data', response.data)
           router.push('/');
         })
@@ -53,8 +53,8 @@ export default {
       email: result.user.email,
       name: result.user.displayName
     });
-    const { id, email, timeUnit, token } = response.data;
-          userStore.$state.user = new User(id, email, timeUnit, token);
+    const { id, email, timeUnit, theme, token } = response.data;
+          userStore.$state.user = new User(id, email, timeUnit, theme, token);
     router.push('/');
   } catch (error) {
     console.log(error);
