@@ -1,7 +1,7 @@
 <template>
   <h1>Créer un compte</h1>
   <p v-if="errorMessage">{{ errorMessage }}</p>
-  <p><input type="text" class="input w-full max-w-xs" id="email" placeholder="Email" v-model="email" /></p>
+  <p><input type="text" class="input w-full max-w-xs" id="name" placeholder="Email" v-model="email" /></p>
   <p><input type="password" class="input w-full max-w-xs" id="password" placeholder="Mot de passe" v-model="password" /></p>
   <p><button class="btn btn-primary" @click="register">S'inscrire</button></p>
   <p> <button class="btn btn-primary"  @click="signInWithGoogle">S'inscrire avec Google</button></p>
