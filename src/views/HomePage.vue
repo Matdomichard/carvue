@@ -1,19 +1,18 @@
 <template>
-  <div>
-    
-    <h1 class="text-2xl font-bold leading-tight">Enregistrer une nouvelle date</h1>
-    <form>
-      <label for="name">Nom de la date</label>
-      <input type="text" placeholder="Type here" class="input w-full max-w-xs" id="name" v-model="form.name" />
-      <br />
-      <label for="date">Date</label>
-      <input class="input w-full max-w-xs" type="date" id="date" v-model="form.selectedDate" />
-      <br />
-      <button class="btn btn-primary" @click.prevent="saveDate">Enregistrer</button>
+  <div class="flex flex-col justify-center items-center">
+    <h1 class="text-3xl font-bold leading-tight my-6 text-center">Enregistrer une nouvelle date</h1>
+    <form class="flex flex-col items-start mb-6">
+      <label for="name" class="text-lg font-bold mb-2">Nom de la date</label>
+      <input type="text" placeholder="Entrez un nom" class="input w-full max-w-xs mb-4" id="name" v-model="form.name" />
+      
+      <label for="date" class="text-lg font-bold mb-2">Date</label>
+      <input class="input w-full max-w-xs mb-4" type="date" id="date" v-model="form.selectedDate" />
+      
+      <button class="btn btn-primary py-2 px-6" @click.prevent="saveDate">Enregistrer</button>
     </form>
-    <h1>Dates enregistrées</h1>
+    <h1 class="text-3xl font-bold leading-tight my-6 text-center">Dates enregistrées</h1>
     <template v-if="userStore.$state.user.id">
-      <ul>
+      <ul class="w-full">
         <li v-for="(date, index) in savedDates" :key="date.id">
           <div class="stats bg-primary text-primary-content">
             <div class="stat">
@@ -29,17 +28,18 @@
         </li>
       </ul>
     </template>
-    <template v-if="!userStore.$state.user.id">
-      <p>Vous n'êtes pas connecté. Pour enregistrer vos dates, veuillez vous connecter ou créer un compte.</p>
+    <template v-if="!userStore.$state.user.id" class="flex flex-col justify-center items-center">
+      <p class="my-6 text-center">Vous n'êtes pas connecté. Pour enregistrer vos dates, veuillez vous connecter ou créer un compte.</p>
       <router-link to="/sign-in">
-        <p><button class="btn btn-primary">Se connecter</button></p>
+        <p><button class="btn btn-primary py-2 px-6 my-2">Se connecter</button></p>
       </router-link>
       <router-link to="/register">
-        <p><button class="btn btn-primary">Créer un compte</button></p>
+        <p><button class="btn btn-primary py-2 px-6 my-2">Créer un compte</button></p>
       </router-link>
     </template>
   </div>
 </template>
+
 
 <script lang="ts">
 import { ref, onMounted, defineComponent } from 'vue';

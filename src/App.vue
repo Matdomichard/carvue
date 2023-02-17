@@ -1,17 +1,19 @@
 <template>
   <div class="flex flex-col justify-center items-center h-screen">
     <div class="absolute inset-0 bg-center  flex flex-col justify-center items-center" style="background-image: url('/background.svg')">
-      <div class="container w-full rounded-3xl shadow-lg p-10 my-6 bg-white h-full px-4 sm:px-6">
+      <div class="container w-full rounded-3xl shadow-lg p-10 my- bg-white h-full px-4 sm:px-6">
         <!-- Navigation -->
-      <header class="text-gray py-4 mt-0">
+      <header class="text-gray  px-4 py-4 mt-0">
         <div class="flex justify-between items-center">
           <a href="#" class="font-bold text-lg">Zzz tracker</a>
           <nav>
-            <router-link to="/" class="text-gray-400 hover:text-white px-3">Home</router-link>
-            <router-link to="/register" class="text-gray-400 hover:text-white px-3">Register</router-link>
-            <router-link to="/sign-in" class="text-gray-400 hover:text-white px-3">Login</router-link>
-            <button class="btn btn-sm" @click="handleSignOut" v-if="userStore.$state.user.id">Sign out</button>
+            <router-link to="/" class="text-gray-400 hover:text-white px-3">Accueil</router-link>
+            <router-link to="/register" class="text-gray-400 hover:text-white px-3">Inscription</router-link>
+            <router-link to="/sign-in" class="text-gray-400 hover:text-white px-3">Connexion</router-link>
+            <themeSwitcher></themeSwitcher>
+            <button class="btn btn-sm mx-3" @click="handleSignOut" v-if="userStore.$state.user.id">Déconnexion</button>
           </nav>
+          
         </div>
       </header>
         <!-- Main content -->
@@ -33,13 +35,13 @@ import firebase from "firebase/app";
 import router from "./router";
 import { useUserStore } from "./stores/userStore";
 import './index.css'
-import ThemeSwitcher from "@/components/themeSwitcher.vue";
+import themeSwitcher from "@/components/themeSwitcher.vue";
 
 
 export default {
   name: "App",
   components: {
-    ThemeSwitcher,
+    themeSwitcher,
   },
   setup() {
     const userStore = useUserStore();

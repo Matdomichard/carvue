@@ -1,11 +1,22 @@
 <template>
-  <h1>Se connecter à son compte</h1>
-  <p><input type="text" class="input w-full max-w-xs" id="email" placeholder="Email" v-model="email" /></p>
-  <p><input type="password" class="input w-full max-w-xs" id="password" placeholder="Mot de passe" v-model="password" /></p>
-  <p v-if="errMsg">{{ errMsg }}</p>
-  <p><button class="btn btn-primary" @click="login">Se connecter</button></p>
-  <p><button class="btn btn-primary" @click="signInWithGoogle">Se connecter avec google</button></p>
+  <h2 class="text-3xl font-bold leading-tight my-6">Se connecter à son compte</h2>
+  <div class="flex flex-col justify-center items-center">
+    <div class="flex flex-col items-start">
+      <label class="input-group flex mb-4">
+        <span class="mr-2 font-bold">Email</span>
+        <input v-model="email" id="email" type="email" placeholder="votre-email@example.com" class="input input-bordered" />
+      </label>
+      <label class="input-group flex mb-6">
+        <span class="mr-2 font-bold">Mot de passe</span>
+        <input v-model="password" id="password" type="password" placeholder="votre mot de passe" class="input input-bordered" />
+      </label>
+    </div>
+  </div>
+  <p v-if="errMsg" class="text-red-500 my-4">{{ errMsg }}</p>
+  <p class="my-4"><button class="btn btn-primary py-2 px-6" @click="login">Se connecter</button></p>
+  <p class="my-4"><button class="btn btn-primary py-2 px-6" @click="signInWithGoogle">Se connecter avec Google</button></p>
 </template>
+
 
 <script lang="ts">
 import { ref } from 'vue';

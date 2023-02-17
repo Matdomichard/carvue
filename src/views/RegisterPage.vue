@@ -1,11 +1,22 @@
 <template>
-  <h1>Créer un compte</h1>
-  <p v-if="errorMessage">{{ errorMessage }}</p>
-  <p><input type="text" class="input w-full max-w-xs" id="name" placeholder="Email" v-model="email" /></p>
-  <p><input type="password" class="input w-full max-w-xs" id="password" placeholder="Mot de passe" v-model="password" /></p>
-  <p><button class="btn btn-primary" @click="register">S'inscrire</button></p>
-  <p> <button class="btn btn-primary"  @click="signInWithGoogle">S'inscrire avec Google</button></p>
+  <h2 class="text-3xl font-bold leading-tight my-6">Créer un compte</h2>
+  <div class="flex flex-col justify-center items-center">
+    <div class="flex flex-col items-start">
+      <label class="input-group flex mb-4">
+        <span class="mr-2 font-bold">Email</span>
+        <input v-model="email" id="email" type="email" placeholder="votre-email@example.com" class="input input-bordered" />
+      </label>
+      <label class="input-group flex mb-6">
+        <span class="mr-2 font-bold">Mot de passe</span>
+        <input v-model="password" id="password" type="password" placeholder="votre mot de passe" class="input input-bordered" />
+      </label>
+    </div>
+  </div>
+  <p v-if="errorMessage" class="text-red-500 my-4">{{ errorMessage }}</p>
+  <p class="my-4"><button class="btn btn-primary py-2 px-6" @click="register">S'inscrire</button></p>
+  <p class="my-4"><button class="btn btn-primary py-2 px-6" @click="signInWithGoogle">S'inscrire avec Google</button></p>
 </template>
+
 <script lang="ts">
 import { ref } from 'vue';
 import axios from 'axios';
