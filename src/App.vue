@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col justify-center items-center h-screen">
     <div class="absolute inset-0 bg-center  flex flex-col justify-center items-center" style="background-image: url('/background.svg')">
-      <div class="container w-full rounded-3xl shadow-lg p-10 my- bg-white h-full px-4 sm:px-6">
+      <div class="container w-full rounded-3xl shadow-lg p-10 my-4 bg-white h-full px-4 sm:px-6">
         <!-- Navigation -->
       <header class="text-gray  px-4 py-4 mt-0">
         <div class="flex justify-between items-center">
