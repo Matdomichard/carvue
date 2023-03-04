@@ -17,7 +17,7 @@
           <div class="stats bg-primary text-primary-content">
             <div class="stat">
               <div class="stat-title">{{ date.name }}</div>
-              <DateCalculator :date="new Date(date.date)" />
+              <DateCalculator :date="date.date" />
               <div class="stat-actions">
                 <button class="btn btn-sm btn-success" @click="deleteSavedDate(date.id, index)">
                   <i>❌</i>
@@ -44,20 +44,17 @@
 <script lang="ts">
 import { ref, onMounted, defineComponent } from 'vue';
 import axios from 'axios';
-import DateCalculator from '@/components/dateCalculator.vue';
 import { useUserStore } from '@/stores/userStore';
 import { DateModel } from '@/models/date.model';
-import { Props } from '@/components/dateCalculator.vue';
+import DateCalculator from '@/components/dateCalculator.vue';
+
 
 export default defineComponent({
   name: 'HomePage',
-  props: {
-    date: {
-      type: Date,
-      required: true,
-    },
+  components: {
+    DateCalculator
   },
-  setup(props: Props) {
+  setup() {
     const userStore = useUserStore();
     const form = ref({
       name: '',
@@ -76,7 +73,7 @@ export default defineComponent({
           date: selectedDate,
         }, { headers })
           .then((response) => {
-            const newDate = new DateModel(response.data.id, form.value.name, selectedDate);
+            const newDate = new DateModel(response.data.id, response.data.name, response.data.date);
             savedDates.value.push(newDate);
             form.value.name = '';
             form.value.selectedDate = '';
@@ -114,6 +111,7 @@ export default defineComponent({
     };
     axios.get(`dates/user/${userStore.$state.user.id}`, { headers })
       .then((response) => {
+        console.log('savedDates dans le fetchsavedates:', response.data);
         savedDates.value = response.data;
       })
       .catch((error) => {

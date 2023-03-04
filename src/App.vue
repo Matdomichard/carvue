@@ -36,12 +36,14 @@ import router from "./router";
 import { useUserStore } from "./stores/userStore";
 import './index.css'
 import themeSwitcher from "@/components/themeSwitcher.vue";
+import DateCalculator from '@/components/dateCalculator.vue'
 
 
 export default {
   name: "App",
   components: {
     themeSwitcher,
+    DateCalculator
   },
   setup() {
     const userStore = useUserStore();

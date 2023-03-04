@@ -5,22 +5,22 @@
 </template>
 
 <script lang="ts">
-import { ref, computed } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 
 export interface Props {
-  date: Date;
+  date: string;
 }
 
-export default {
+export default defineComponent({
   props: {
     date: {
-      type: Date, // change type to Date
+      type: String,
       required: true,
     },
   },
   setup(props: Props) {
-    const selectedDate = ref(props.date);
+    const selectedDate = ref(new Date(props.date));
     const userStore = useUserStore();
 
     const sleepCalculator = computed(() => {
@@ -29,7 +29,7 @@ export default {
       }
 
       const now = new Date();
-      const eventDate = selectedDate.value; // use as Date
+      const eventDate = selectedDate.value; 
       const diffTime = eventDate.getTime() - now.getTime();
       const diffDays = diffTime / (1000 * 3600 * 24);
 
@@ -48,5 +48,5 @@ export default {
       sleepCalculator,
     };
   },
-};
+});
 </script>
