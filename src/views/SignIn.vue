@@ -1,17 +1,28 @@
 <template>
-  <h1>Se connecter à son compte</h1>
-  <p><input type="text" placeholder="Email" v-model="email" /></p>
-  <p><input type="password" placeholder="Mot de passe" v-model="password" /></p>
-  <p v-if="errMsg">{{ errMsg }}</p>
-  <p><button @click="login">Se connecter</button></p>
-  <p><button @click="signInWithGoogle">Se connecter avec google</button></p>
+  <h2 class="text-3xl font-bold leading-tight my-6">Se connecter à son compte</h2>
+  <div class="flex flex-col justify-center items-center">
+    <div class="flex flex-col items-start">
+      <label class="input-group flex mb-4">
+        <span class="mr-2 font-bold">Email</span>
+        <input v-model="email" id="email" type="email" placeholder="votre-email@example.com" class="input input-bordered" />
+      </label>
+      <label class="input-group flex mb-6">
+        <span class="mr-2 font-bold">Mot de passe</span>
+        <input v-model="password" id="password" type="password" placeholder="votre mot de passe" class="input input-bordered" />
+      </label>
+    </div>
+  </div>
+  <p v-if="errMsg" class="text-red-500 my-4">{{ errMsg }}</p>
+  <p class="my-4"><button class="btn btn-primary py-2 px-6" @click="login">Se connecter</button></p>
+  <p class="my-4"><button class="btn btn-primary py-2 px-6" @click="signInWithGoogle">Se connecter avec Google</button></p>
 </template>
+
 
 <script lang="ts">
 import { ref } from 'vue';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
+import { axiosInstance } from '@/plugins/axios';
 import { useUserStore } from '@/stores/userStore';
 import { User } from '@/models/user.model';
 
@@ -23,17 +34,21 @@ export default {
     const router = useRouter();
     const userStore = useUserStore();
 
+    const timeUnit = 'dodos';
+    
     const login = () => {
       if (!email.value.includes('@')) {
         errMsg.value = "Email invalide";
       } else {
-        axios.post('users/login', {
-        email: email.value,
-        password: password.value,
+        axiosInstance.post('api/v1/auth/authenticate', {
+          email: email.value,
+          password: password.value,
+          signInMethod: 'email',
+          timeUnit: timeUnit
         })
         .then((response) => {
-          const { id, email, timeUnit, token } = response.data;
-          userStore.$state.user = new User(id, email, timeUnit, token);
+          const { userId, token, error } = response.data;
+          userStore.$state.user = new User(userId, email.value, timeUnit, null, token);
           console.log('response data', response.data)
           router.push('/');
         })
@@ -45,21 +60,23 @@ export default {
     };
 
     const signInWithGoogle = async () => {
-  try {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(getAuth(), provider);
+      try {
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(getAuth(), provider);
+        const response = await axiosInstance.post('api/v1/auth/authenticate', {
+          email: result.user.email,
+          password: result.user.uid.substring(0, 9),
+          signInMethod: 'google',
+          timeUnit: timeUnit
+        });
+        const { userId, token, error } = response.data;
 
-    const response = await axios.post('users/login', {
-      email: result.user.email,
-      name: result.user.displayName
-    });
-    const { id, email, timeUnit, token } = response.data;
-          userStore.$state.user = new User(id, email, timeUnit, token);
-    router.push('/');
-  } catch (error) {
-    console.log(error);
-  }
-};
+        userStore.$state.user = new User(userId, email.value, timeUnit, null, token);
+        router.push('/');
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
     return {
       email,

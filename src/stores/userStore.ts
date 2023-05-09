@@ -3,16 +3,19 @@ import { defineStore } from 'pinia';
 
 export const useUserStore = defineStore('UserStore', {
   state: () => ({
-    user: new User(null, null, null, null),
+    user: new User(null, null, null, null, null),
   }),
   actions: {
     setUser(user: User) {
       this.$state.user = user;
     },
     signOut() {
-      this.$state.user = new User(null, null, null, null);
+      this.$state.user = new User(null, null, null, null, null);
+    },
+    setTheme(theme: string) { 
+      this.$state.user.theme = theme;
     }
-  }
+  },
 });
 
 
