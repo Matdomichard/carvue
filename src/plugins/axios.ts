@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 
 const instance: AxiosInstance = axios.create({
-  baseURL: process.env.API_URL,
+  baseURL: process.env.VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
     },
@@ -9,7 +9,7 @@ const instance: AxiosInstance = axios.create({
 
 // Ajouter un intercepteur pour gérer les erreurs
 instance.interceptors.response.use(
-  (response) => response,
+  (response) => response, 
   (error) => {
     if (error.response && error.response.status === 401) {
       // Rediriger vers la page de connexion si l'utilisateur n'est pas authentifié
