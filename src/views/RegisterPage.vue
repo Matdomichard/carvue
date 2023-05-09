@@ -1,19 +1,27 @@
 <template>
-  <h1>Créer un compte</h1>
-  <p v-if="errorMessage">{{ errorMessage }}</p>
-  <p><input type="text" placeholder="Email" v-model="email" /></p>
-  <p><input type="password" placeholder="Mot de passe" v-model="password" /></p>
-  <p><button @click="register">S'inscrire</button></p>
-  <p> <button @click="signInWithGoogle">S'inscrire avec Google</button></p>
+  <h2 class="text-3xl font-bold leading-tight my-6">Créer un compte</h2>
+  <div class="flex flex-col justify-center items-center">
+    <div class="flex flex-col items-start">
+      <label class="input-group flex mb-4">
+        <span class="mr-2 font-bold">Email</span>
+        <input v-model="email" id="email" type="email" placeholder="votre-email@example.com" class="input input-bordered" />
+      </label>
+      <label class="input-group flex mb-6">
+        <span class="mr-2 font-bold">Mot de passe</span>
+        <input v-model="password" id="password" type="password" placeholder="votre mot de passe" class="input input-bordered" />
+      </label>
+    </div>
+  </div>
+  <p v-if="errorMessage" class="text-red-500 my-4">{{ errorMessage }}</p>
+  <p class="my-4"><button class="btn btn-primary py-2 px-6" @click="register">S'inscrire</button></p>
+  <p class="my-4"><button class="btn btn-primary py-2 px-6" @click="signInWithGoogle">S'inscrire avec Google</button></p>
 </template>
+
 <script lang="ts">
 import { ref } from 'vue';
-import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { useUserStore } from '@/stores/userStore';
-import { User } from '@/models/user.model';
-
+import UserService from '@/services/UserService';
 
 export default {
   name: 'register',
@@ -22,7 +30,6 @@ export default {
     const password = ref('');
     const errorMessage = ref('');
     const router = useRouter();
-    const userStore = useUserStore();
 
     const register = () => {
       if (!email.value.includes('@')) {
@@ -33,48 +40,24 @@ export default {
         errorMessage.value = 'Mot de passe manquant';
         return;
       }
-      axios.post('users/createUser', {
-        email: email.value,
-        password: password.value,
-        signInMethod: 'email'
-      })
-        .then((response) => {
-          const { id, email, timeUnit, token } = response.data;
-          userStore.$state.user = new User(id, email, timeUnit, token);
-          router.push('/');
-        })
-        .catch((error) => {
-          console.log(error.response);
-          errorMessage.value = "Une erreur s'est produite lors de la création du compte";
-        });
+        
+      UserService.createUser(email.value, password.value, 'email', 'dodos', router);
     };
 
     const signInWithGoogle = async () => {
-      try {
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(getAuth(), provider);
-        console.log(result.user);
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(getAuth(), provider);
+  
+      UserService.createUser(result.user.email, result.user.uid.substring(0, 9), 'google', 'dodos', router);
+    };
 
-        const response = await axios.post('users/createUser', {
-          email: result.user.email,
-          password: result.user.uid,
-          signInMethod: "google"
-        });
-        const { id, email, timeUnit, token } = response.data;
-          userStore.$state.user = new User(id, email, timeUnit, token);
-    router.push('/');
-  } catch (error) {
-    console.log(error);
+    return {
+      email,
+      password,
+      register,
+      signInWithGoogle,
+      errorMessage,
+    };
   }
-};
-
-  return {
-    email,
-    password,
-    register,
-    signInWithGoogle,
-    errorMessage,
-  };
-  },
 };
 </script>
