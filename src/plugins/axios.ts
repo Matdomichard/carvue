@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 
 
 const instance: AxiosInstance = axios.create({
-  baseURL: 'https://comptearebours.herokuapp.com/',
+  baseURL: 'https://zzztracker.site',
   headers: {
     'Content-Type': 'application/json',
     },
