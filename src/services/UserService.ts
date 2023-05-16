@@ -12,6 +12,7 @@ export default {
     const userStore = useUserStore();
     let status;
     
+    
     await axiosInstance.post('/api/users', {
       email: email,
       password: password,

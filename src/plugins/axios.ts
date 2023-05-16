@@ -4,8 +4,11 @@ const instance: AxiosInstance = axios.create({
   baseURL: 'https://comptearebours.herokuapp.com',
   headers: {
     'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': 'https://zzztracker.site', // Remplacez le domaine par celui de votre front-end
+
   },
 });
+
 
 // Ajouter un intercepteur pour gérer les erreurs
 instance.interceptors.response.use(
